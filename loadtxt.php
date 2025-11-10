@@ -1,33 +1,31 @@
 <?php
-	function dtm(\DateTime $dateTime)
-	{
-		$secs = $dateTime->getTimestamp(); // Gets the seconds
-		$millisecs = $secs*1000; // Converted to milliseconds
-		$millisecs += $dateTime->format("u")/1000; // Microseconds converted to seconds
-		return $millisecs;
+	function totalDiff(DateTime $master, DateTime $second) {
+		$diff = $second->format("U.v") - $master->format("U.v");
+		return round($diff, 3);
 	}
 	
 	$file = fopen("ranking.txt", "r") or die("Error!");
-	if(file_exists('stop-script')) {
-		echo 'Status: Stopped<br>';
-	} else {
-		echo 'Status: Running<br>';
-	}
-	echo "Ranking:<br>";
+
+	$currentRank = 1;
 	while(!feof($file)) {
 		$arr = explode("|", substr(fgets($file),3));
 		$team = $arr[0];
-		$date = $arr[1];
-		if(substr($team,0,1) == "1") {
-			$master_date = new DateTime($date);
+		if(isset($arr[1])) {
+			$date = $arr[1];
 		} else {
-			$second_date = new DateTime($date);
+			$date = null;
 		}
-		if(substr($team,0,1) >= "2") {
-			$echo = number_format(Round((dtm($second_date)-dtm($master_date))/1000,3),3);
+		if($currentRank === 1 && $arr[0] != "") {
+			$master_date = new DateTime($date);
+			echo "#" . $currentRank . ": ". $team . "<br>";
+			$currentRank++;
+		} else {
+			if($arr[0] != "") {
+				$second_date = new DateTime($date);
+				$echo = totalDiff($master_date, $second_date);
+				echo "#" . $currentRank . ": ". $team . "| +".$echo."s <br>";
+			}
 		}
-		//echo substr(fgets($file),3,-28)."<br>";
-		echo "<br>".$team/*." ".$date*/; if(isset($echo)) {echo " +".$echo."s"; }
 	}
 	fclose($file);	
 ?>

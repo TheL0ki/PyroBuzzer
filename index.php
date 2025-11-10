@@ -1,53 +1,52 @@
 <html>
-<head>
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript">
-	 
-	$(function() {
-	 
-		getStatus();
-	 
-	});
-	 
-	function getStatus() {
-	 
-		$('div#text-file-container').load('loadtxt.php');
-		setTimeout("getStatus()",1000);
-	 
-	}
-	
-	function stopLoad() {
-		window.stop();
-		document.execCommand("Stop");
-	}
-	
-	function reload() {
-		$(document).load('start.php');
-	}
-	
-	function stop() {
-		$(document).load('stop.php');
-	}
-	 
-	</script>
-</head>
-<body>
-	<?php
-	echo '<button onclick="reload()">Start</button>';
-	echo '<button onclick="stop()">Stop</button><br><br>';
-	ob_flush();
-	#passthru('sudo /usr/bin/python2.7 /home/pi/python_scripts/buzzer.py');
-	#$command = escapeshellcmd("/home/pi/python_scripts/buzzer.py");
-	#shell_exec($command);
-	#$command = "sudo /usr/bin/python2.7 /home/pi/python_scripts/buzzer.py";
-	#exec($command, $output);
-	?>
-	<table style="border: solid 1px black">
-		<tr>
-			<td>
-				<div id="text-file-container"></div>
-			</td>
-		</tr>
-	</table>
-</body>
+	<head>
+		<script src="js/jquery-3.7.1.min.js"></script>
+		<script src="css/tailwind.js"></script>
+		<script type="text/javascript">	 
+			$(function() {
+				getStatus();
+			});
+			
+			function getStatus() {
+				$('#text-file-container').load('loadtxt.php');
+				$('#status-container').load('get_status.php');
+				setTimeout("getStatus()",1000);
+			}
+			
+			function stopLoad() {
+				window.stop();
+				document.execCommand("Stop");
+			}
+			
+			function reload() {
+				$.ajax({
+					url: 'start.php',
+				});
+			}
+			
+			function stop() {
+				$.ajax({
+					url: 'stop.php',
+				});
+			}
+		</script>
+	</head>
+	<body class="font-sans antialiased p-4">
+		<main>
+			<div class="max-w-2xl text-3xl">
+				<div class="bg-gray-200 rounded-md p-2 max-w-2xl">
+					<button class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-md px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="reload()">Start</button>
+					<button class="py-2.5 px-5 me-2 mb-2 text-gray-900 focus:outline-none bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" onclick="stop()">Stop</button>
+				</div>
+				<div class="bg-gray-200 rounded-md mt-2 p-2 flex justify-left space-x-2">
+					<div class="flex">Status:</div>
+					<div id="status-container" class="flex align-middle"></div>
+				</div>
+				<div class="bg-gray-200 rounded-md mt-2 p-2 max-w-2xl space-y-2">
+					<div>Ranking:</div>
+					<div id="text-file-container"></div>
+				</div>
+			</div>
+		</main>
+	</body>
 </html>
