@@ -93,3 +93,12 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+*ranking.txt
+
+vendor/
+
+history/
+smarty/templates_c/
+smarty/cache/
+test.*

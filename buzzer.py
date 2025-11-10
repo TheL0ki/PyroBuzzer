@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 import os
 import smbus
 import datetime
+import json
 
 b = smbus.SMBus(1)
 address = 0x20
@@ -16,18 +17,40 @@ ranking_file = '/var/www/PyroBuzzer/ranking.txt'
 stop_file = '/var/www/PyroBuzzer/stop-script'
 
 def checkseat(seat):
-	flag = False
-	with open(ranking_file, 'r') as file_read:
-		for line in file_read:
-			if line[:2] == seat:
-				flag = True
-	if flag != True:
+	# Read existing entries and check if team already exists
+	team_exists = False
+	existing_entries = []
+	
+	# Read file if it exists and is not empty
+	if os.path.exists(ranking_file) and os.path.getsize(ranking_file) > 0:
+		with open(ranking_file, 'r') as file_read:
+			for line in file_read:
+				line = line.strip()
+				if line:  # Skip empty lines
+					try:
+						entry = json.loads(line)
+						existing_entries.append(entry)
+						if entry.get('team') == seat:
+							team_exists = True
+					except json.JSONDecodeError:
+						# Skip malformed JSON lines
+						continue
+	
+	# If team doesn't exist, add new entry
+	if not team_exists:
+		# Calculate rank (count of existing entries + 1)
+		rank = len(existing_entries) + 1
+		
+		# Create JSON object
+		new_entry = {
+			"rank": rank,
+			"team": seat,
+			"date": datetime.datetime.now().isoformat()
+		}
+		
+		# Append to file
 		with open(ranking_file, 'a') as file_w:
-			if int(seat) < 10:
-				id = int(seat[1:2])-1
-			else:
-				id = int(seat)-1
-			file_w.write("%s Team %s - Button pressed | %s \n" % (seat, seat, datetime.datetime.now().isoformat()))
+			file_w.write(json.dumps(new_entry) + '\n')
 
 while True:
 	if os.path.exists(ranking_file) and not os.path.exists(stop_file):

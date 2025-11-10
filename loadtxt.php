@@ -6,24 +6,33 @@
 	
 	$file = fopen("ranking.txt", "r") or die("Error!");
 
-	$currentRank = 1;
 	while(!feof($file)) {
-		$arr = explode("|", substr(fgets($file),3));
-		$team = $arr[0];
-		if(isset($arr[1])) {
-			$date = $arr[1];
-		} else {
-			$date = null;
-		}
-		if($currentRank === 1 && $arr[0] != "") {
-			$master_date = new DateTime($date);
-			echo "#" . $currentRank . ": ". $team . "<br>";
-			$currentRank++;
-		} else {
-			if($arr[0] != "") {
-				$second_date = new DateTime($date);
-				$echo = totalDiff($master_date, $second_date);
-				echo "#" . $currentRank . ": ". $team . "| +".$echo."s <br>";
+		$line = json_decode(fgets($file), true);
+		if($line) {
+			$team = $line['team'];
+			$date = $line['date'];
+			$rank = $line['rank'];
+			if($rank === 1 && $team != "") {
+				$master_date = new DateTime($date);
+				echo '
+				<div class="grid grid-cols-3">
+					<div class="text-start">#' . $rank . '</div>
+					<div class="text-center">Team ' . $team . '</div>
+					<div class="text-end"></div>
+				</div>
+				';
+			} else {
+				if($team != "") {
+					$second_date = new DateTime($date);
+					$echo = totalDiff($master_date, $second_date);
+					echo '
+					<div class="grid grid-cols-3"">
+						<div class="text-start">#' . $rank . '</div>
+						<div class="text-center">Team ' . $team . '</div>
+						<div class="text-end">+'.$echo.'s</div>
+					</div>
+					';
+				}
 			}
 		}
 	}

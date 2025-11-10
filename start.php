@@ -1,6 +1,9 @@
 <?php
 if(file_exists('ranking.txt')) {
-    rename('ranking.txt', (new DateTime)->format('Y-m-d_H-i-s.u') . '_ranking.txt');
+    if(!file_exists('history')) {
+        mkdir('history');
+    }
+    rename('ranking.txt', 'history/' . (new DateTime)->format('Y-m-d-H-i-s') . '_ranking.txt');
 }
 unlink('stop-script');
 fopen('ranking.txt', "w");
