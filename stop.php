@@ -1,3 +1,2 @@
 <?php
-	$file=fopen('stop-script', "w");
-?>
+	fopen('stop-script', "w");
