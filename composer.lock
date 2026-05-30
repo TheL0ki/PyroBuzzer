@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b7022ba3fa6ff6e1d0ef4f90dba86e5",
+    "content-hash": "07f96096da1ca435cd5b762279f4b918",
     "packages": [
         {
             "name": "smarty/smarty",
-            "version": "v5.6.0",
+            "version": "v5.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "1fc41e385da8a27a87bec5914392ab662a7bb8ec"
+                "reference": "78d259d3b971c59a0cd719c270cc5cbb740c36a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/1fc41e385da8a27a87bec5914392ab662a7bb8ec",
-                "reference": "1fc41e385da8a27a87bec5914392ab662a7bb8ec",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/78d259d3b971c59a0cd719c270cc5cbb740c36a7",
+                "reference": "78d259d3b971c59a0cd719c270cc5cbb740c36a7",
                 "shasum": ""
             },
             "require": {
@@ -72,7 +72,7 @@
             "support": {
                 "forum": "https://github.com/smarty-php/smarty/discussions",
                 "issues": "https://github.com/smarty-php/smarty/issues",
-                "source": "https://github.com/smarty-php/smarty/tree/v5.6.0"
+                "source": "https://github.com/smarty-php/smarty/tree/v5.8.0"
             },
             "funding": [
                 {
@@ -80,74 +80,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-03T21:22:25+00:00"
-        },
-        {
-            "name": "symfony/deprecation-contracts",
-            "version": "v3.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "63afe740e99a13ba87ec199bb07bbdee937a5b62"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/63afe740e99a13ba87ec199bb07bbdee937a5b62",
-                "reference": "63afe740e99a13ba87ec199bb07bbdee937a5b62",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "type": "library",
-            "extra": {
-                "thanks": {
-                    "url": "https://github.com/symfony/contracts",
-                    "name": "symfony/contracts"
-                },
-                "branch-alias": {
-                    "dev-main": "3.6-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "function.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "A generic function and convention to trigger deprecation notices",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.6.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-09-25T14:21:43+00:00"
+            "time": "2026-02-15T14:27:15+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -236,31 +169,31 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v7.3.5",
+            "version": "v8.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "476c4ae17f43a9a36650c69879dcf5b1e6ae724d"
+                "reference": "c2c4df1d21477cc21c9f6dc1b14d07c3abc4963e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/476c4ae17f43a9a36650c69879dcf5b1e6ae724d",
-                "reference": "476c4ae17f43a9a36650c69879dcf5b1e6ae724d",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/c2c4df1d21477cc21c9f6dc1b14d07c3abc4963e",
+                "reference": "c2c4df1d21477cc21c9f6dc1b14d07c3abc4963e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2",
-                "symfony/deprecation-contracts": "^2.5|^3",
-                "symfony/polyfill-mbstring": "~1.0"
+                "php": ">=8.4.1",
+                "symfony/polyfill-mbstring": "^1.0"
             },
             "conflict": {
-                "symfony/console": "<6.4"
+                "symfony/console": "<7.4",
+                "symfony/error-handler": "<7.4"
             },
             "require-dev": {
-                "symfony/console": "^6.4|^7.0",
-                "symfony/http-kernel": "^6.4|^7.0",
-                "symfony/process": "^6.4|^7.0",
-                "symfony/uid": "^6.4|^7.0",
+                "symfony/console": "^7.4|^8.0",
+                "symfony/http-kernel": "^7.4|^8.0",
+                "symfony/process": "^7.4|^8.0",
+                "symfony/uid": "^7.4|^8.0",
                 "twig/twig": "^3.12"
             },
             "bin": [
@@ -299,7 +232,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v7.3.5"
+                "source": "https://github.com/symfony/var-dumper/tree/v8.1.0"
             },
             "funding": [
                 {
@@ -319,7 +252,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-27T09:00:46+00:00"
+            "time": "2026-05-29T05:06:50+00:00"
         }
     ],
     "packages-dev": [],
@@ -330,5 +263,5 @@
     "prefer-lowest": false,
     "platform": {},
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
