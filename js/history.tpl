@@ -15,6 +15,7 @@
         var itemsPerPage = 10;
         var currentPage = 1;
         var totalPages = Math.ceil(keys.length / itemsPerPage);
+        var selectedKey = null;
         
         // Function to format filename to date string (Y-m-d H:i:s)
         function formatDateFromFilename(filename) {
@@ -37,17 +38,26 @@
             var pageKeys = keys.slice(startIndex, endIndex);
             
             var $list = $('<ul>').addClass('list-inside list-disc p-2');
-            
+
+            if (pageKeys.length === 0) {
+                $list.append($('<li>').addClass('list-none text-gray-600').text('No history entries.'));
+            } else {
             pageKeys.forEach(function(key) {
-                var $li = $('<li>').addClass('mb-2');
+                var $li = $('<li>').addClass('mb-2 flex items-center justify-between gap-2');
                 var $link = $('<a>')
                     .attr('href', '#')
                     .addClass('history-link text-gray-700 hover:text-gray-900 underline cursor-pointer')
                     .attr('data-key', key)
                     .text(formatDateFromFilename(key));
-                $li.append($link);
+                var $deleteBtn = $('<button>')
+                    .attr('type', 'button')
+                    .addClass('history-delete shrink-0 py-1 px-2 text-sm text-red-700 bg-white border border-red-300 rounded hover:bg-red-50')
+                    .attr('data-key', key)
+                    .text('Löschen');
+                $li.append($link, $deleteBtn);
                 $list.append($li);
             });
+            }
             
             // Load the list into the container
             $('#history-list').html($list);
@@ -157,10 +167,54 @@
             return Math.round(diff * 1000) / 1000; // Round to 3 decimal places
         }
         
+        function removeHistoryEntry(key) {
+            delete historyData[key];
+            keys = keys.filter(function(k) { return k !== key; });
+            totalPages = Math.max(1, Math.ceil(keys.length / itemsPerPage));
+            if (currentPage > totalPages) {
+                currentPage = totalPages;
+            }
+            if (selectedKey === key) {
+                selectedKey = null;
+                $('#history-container').empty().parent().addClass('hidden');
+            }
+            renderHistoryList();
+        }
+
+        $(document).on('click', '.history-delete', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var key = $(this).attr('data-key');
+            if (!confirm('Delete this result permanently?')) {
+                return;
+            }
+
+            var $btn = $(this).prop('disabled', true);
+
+            $.ajax({
+                url: 'delete_history.php',
+                method: 'POST',
+                data: { filename: key },
+                dataType: 'json'
+            }).done(function(response) {
+                if (response.success) {
+                    removeHistoryEntry(key);
+                } else {
+                    alert(response.error || 'Failed to delete result.');
+                    $btn.prop('disabled', false);
+                }
+            }).fail(function() {
+                alert('Failed to delete result.');
+                $btn.prop('disabled', false);
+            });
+        });
+
         // Add click handlers to the links
         $(document).on('click', '.history-link', function(e) {
             e.preventDefault();
             var key = $(this).attr('data-key');
+            selectedKey = key;
             var content = historyData[key];
             
             // Display the content in the history container using grid format
