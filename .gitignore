@@ -8,7 +8,7 @@ vendor/
 history/*
 stop-script
 ranking.txt
-templates_c/*
+smarty/templates_c/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
