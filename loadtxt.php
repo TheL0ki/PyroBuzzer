@@ -1,4 +1,6 @@
 <?php
+	require 'teams.php';
+
 	function totalDiff(DateTime $master, DateTime $second) {
 		$diff = $second->format("U.v") - $master->format("U.v");
 		return round($diff, 3);
@@ -17,7 +19,7 @@
 				echo '
 				<div class="grid grid-cols-3">
 					<div class="text-start">#' . $rank . '</div>
-					<div class="text-center">Team ' . $team . '</div>
+					<div class="text-center">' . htmlspecialchars(get_team_name($team)) . '</div>
 					<div class="text-end"></div>
 				</div>
 				';
@@ -28,7 +30,7 @@
 					echo '
 					<div class="grid grid-cols-3"">
 						<div class="text-start">#' . $rank . '</div>
-						<div class="text-center">Team ' . $team . '</div>
+						<div class="text-center">' . htmlspecialchars(get_team_name($team)) . '</div>
 						<div class="text-end">+'.$echo.'s</div>
 					</div>
 					';

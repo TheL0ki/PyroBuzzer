@@ -10,6 +10,7 @@ stop-script
 ranking.txt
 dev-press
 sounds/*.mp3
+teams.json
 smarty/templates_c/*
 
 # Byte-compiled / optimized / DLL files

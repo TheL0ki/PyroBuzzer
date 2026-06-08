@@ -1,5 +1,15 @@
 <script type="text/javascript">
+    var teamNames = {};
+
+    function teamDisplayName(teamId) {
+        return teamNames[teamId] || ('Team ' + teamId);
+    }
+
     $(function() {
+        $.getJSON('get_team_names.php').done(function(names) {
+            teamNames = names || {};
+        });
+
         // Get the JSON object from Smarty variable
         var historyData = {$history|@json_encode};
         
@@ -238,14 +248,14 @@
                         if (line.rank === 1) {
                             // Master entry - no time difference
                             $row.append($('<div>').addClass('text-start').text('#' + line.rank));
-                            $row.append($('<div>').addClass('text-center').text('Team ' + line.team));
+                            $row.append($('<div>').addClass('text-center').text(teamDisplayName(line.team)));
                             $row.append($('<div>').addClass('text-end'));
                         } else {
                             // Other entries - calculate time difference
                             var secondDate = new Date(line.date);
                             var timeDiff = totalDiff(masterDate, secondDate);
                             $row.append($('<div>').addClass('text-start').text('#' + line.rank));
-                            $row.append($('<div>').addClass('text-center').text('Team ' + line.team));
+                            $row.append($('<div>').addClass('text-center').text(teamDisplayName(line.team)));
                             $row.append($('<div>').addClass('text-end').text('+' + timeDiff + 's'));
                         }
                         
