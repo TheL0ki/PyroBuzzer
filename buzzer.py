@@ -15,6 +15,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 if DEV_MODE:
 	ranking_file = os.path.join(SCRIPT_DIR, 'ranking.txt')
+	teams_config_file = os.path.join(SCRIPT_DIR, 'teams.json')
 	stop_file = os.path.join(SCRIPT_DIR, 'stop-script')
 	press_file = os.path.join(SCRIPT_DIR, 'dev-press')
 else:
@@ -29,7 +30,22 @@ else:
 	b.write_byte_data(address, 0x0D, 0xFF)
 
 	ranking_file = '/var/www/PyroBuzzer/ranking.txt'
+	teams_config_file = '/var/www/PyroBuzzer/teams.json'
 	stop_file = '/var/www/PyroBuzzer/stop-script'
+
+def get_team_name(seat):
+	default = 'Team {}'.format(seat)
+	if not os.path.exists(teams_config_file):
+		return default
+	try:
+		with open(teams_config_file, 'r') as f:
+			config = json.load(f)
+		if not isinstance(config, dict):
+			return default
+		name = config.get(seat, '').strip()
+		return name if name else default
+	except (OSError, json.JSONDecodeError):
+		return default
 
 def checkseat(seat):
 	# Read existing entries and check if team already exists
@@ -60,6 +76,7 @@ def checkseat(seat):
 		new_entry = {
 			"rank": rank,
 			"team": seat,
+			"name": get_team_name(seat),
 			"date": datetime.datetime.now().isoformat()
 		}
 		

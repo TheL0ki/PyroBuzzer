@@ -39,6 +39,16 @@ function get_team_name(string $id): string
     return $name !== '' ? $name : team_default_name($id);
 }
 
+function get_entry_team_name(array $entry): string
+{
+    $name = trim($entry['name'] ?? '');
+    if ($name !== '') {
+        return $name;
+    }
+
+    return get_team_name($entry['team'] ?? '');
+}
+
 function set_team_name(string $id, string $name): bool
 {
     if (!is_valid_team_id($id)) {

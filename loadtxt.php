@@ -19,7 +19,7 @@
 				echo '
 				<div class="grid grid-cols-3">
 					<div class="text-start">#' . $rank . '</div>
-					<div class="text-center">' . htmlspecialchars(get_team_name($team)) . '</div>
+					<div class="text-center">' . htmlspecialchars(get_entry_team_name($line)) . '</div>
 					<div class="text-end"></div>
 				</div>
 				';
@@ -30,7 +30,7 @@
 					echo '
 					<div class="grid grid-cols-3"">
 						<div class="text-start">#' . $rank . '</div>
-						<div class="text-center">' . htmlspecialchars(get_team_name($team)) . '</div>
+						<div class="text-center">' . htmlspecialchars(get_entry_team_name($line)) . '</div>
 						<div class="text-end">+'.$echo.'s</div>
 					</div>
 					';

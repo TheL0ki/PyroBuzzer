@@ -13,7 +13,7 @@ if (file_exists('ranking.txt') && filesize('ranking.txt') > 0) {
             $entries[] = [
                 'rank' => $line['rank'],
                 'team' => $line['team'],
-                'name' => get_team_name($line['team']),
+                'name' => get_entry_team_name($line),
                 'date' => $line['date'],
             ];
         }
