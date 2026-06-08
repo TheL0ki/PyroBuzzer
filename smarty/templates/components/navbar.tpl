@@ -5,6 +5,7 @@
     <div class="flex items-center space-x-6 mx-auto">
         <a href="index.php" class="text-gray-700 hover:text-gray-900 font-medium transition-colors">Live Ranking</a>
         <a href="history.php" class="text-gray-700 hover:text-gray-900 font-medium transition-colors">Ergebnisse</a>
+        <a href="settings.php" class="text-gray-700 hover:text-gray-900 font-medium transition-colors">Einstellungen</a>
     </div>
     <div class="w-20"></div>
 </nav>

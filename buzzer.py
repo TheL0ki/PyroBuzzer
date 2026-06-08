@@ -1,20 +1,35 @@
 #!/usr/bin/env python
 
-import RPi.GPIO as GPIO
-import os
-import smbus
+import argparse
 import datetime
 import json
+import os
+import time
 
-b = smbus.SMBus(1)
-address = 0x20
-GPIOA = 0x12
-GPIOB = 0x13
-b.write_byte_data(address,0x0C,0xFF)
-b.write_byte_data(address,0x0D,0xFF)
+parser = argparse.ArgumentParser(description='PyroBuzzer button listener')
+parser.add_argument('--dev', action='store_true', help='Dev mode: no hardware, use simulate_press.py')
+args = parser.parse_args()
+DEV_MODE = args.dev or os.environ.get('PYROBUZZER_DEV', '').lower() in ('1', 'true', 'yes')
 
-ranking_file = '/var/www/PyroBuzzer/ranking.txt'
-stop_file = '/var/www/PyroBuzzer/stop-script'
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+if DEV_MODE:
+	ranking_file = os.path.join(SCRIPT_DIR, 'ranking.txt')
+	stop_file = os.path.join(SCRIPT_DIR, 'stop-script')
+	press_file = os.path.join(SCRIPT_DIR, 'dev-press')
+else:
+	import RPi.GPIO as GPIO
+	import smbus
+
+	b = smbus.SMBus(1)
+	address = 0x20
+	GPIOA = 0x12
+	GPIOB = 0x13
+	b.write_byte_data(address, 0x0C, 0xFF)
+	b.write_byte_data(address, 0x0D, 0xFF)
+
+	ranking_file = '/var/www/PyroBuzzer/ranking.txt'
+	stop_file = '/var/www/PyroBuzzer/stop-script'
 
 def checkseat(seat):
 	# Read existing entries and check if team already exists
@@ -52,8 +67,39 @@ def checkseat(seat):
 		with open(ranking_file, 'a') as file_w:
 			file_w.write(json.dumps(new_entry) + '\n')
 
+def read_simulated_press():
+	if not os.path.exists(press_file):
+		return None
+
+	try:
+		with open(press_file, 'r') as f:
+			content = f.read().strip()
+		os.remove(press_file)
+	except OSError:
+		return None
+
+	if content.isdigit():
+		button = int(content)
+		if 1 <= button <= 16:
+			return '{:02d}'.format(button)
+
+	return None
+
+if DEV_MODE:
+	if not os.path.exists(ranking_file):
+		open(ranking_file, 'a').close()
+	print('DEV MODE: python simulate_press.py <1-16> to simulate button presses')
+
 while True:
 	if os.path.exists(ranking_file) and not os.path.exists(stop_file):
+		if DEV_MODE:
+			seat = read_simulated_press()
+			if seat:
+				checkseat(seat)
+				print('Button {} pressed'.format(int(seat)))
+			time.sleep(0.05)
+			continue
+
 		buzzer_a = b.read_byte_data(address,GPIOA)
 		buzzer_b = b.read_byte_data(address,GPIOB)
 		result_a = '{0:08b}'.format(buzzer_a)
